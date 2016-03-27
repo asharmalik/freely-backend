@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require("body-parser");
 var Promise = require("bluebird");
+var crypto = require('crypto');
 
 var db = require("./modules/db.js");
 
@@ -29,9 +30,9 @@ app.post('/meeting', function (req, res) {
     var beginTime = req.body.begin_time; //beginning time MM/dd/yyyy hh:mm
     var endTime = req.body.end_time; //end time MM/dd/yyyy hh:mm
     var duration = req.body.duration; //duration in minutes
-    var sessionId; //TODO: generate
-
-    res.json({success: true, emails: emails, gcmToken: gcmToken, calToken: calToken, beginTime: beginTime, endTime: endTime, duration: duration});
+    var sessionId = crypto.createHash('md5').update(new Date().toString()).digest('hex');
+    
+    res.json({success: true, emails: emails, gcmToken: gcmToken, calToken: calToken, beginTime: beginTime, endTime: endTime, duration: duration, session: sessionId});
 });
 
 /**
