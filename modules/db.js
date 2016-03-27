@@ -2,6 +2,12 @@ var exports = module.exports = {};
 
 var squel = require("squel");
 var mysql = require('mysql');
+var Promise = require("bluebird");
+
+var pool; //mysql connection pool
+
+Promise.promisifyAll(squel);
+
 
 exports.connect = function () {
     pool = mysql.createPool({
