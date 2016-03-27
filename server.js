@@ -28,9 +28,10 @@ app.post('/meeting', function (req, res) {
     var calToken = req.body.calendar_token; //calendar token of the originating user
     var beginTime = req.body.begin_time; //beginning time MM/dd/yyyy hh:mm
     var endTime = req.body.end_time; //end time MM/dd/yyyy hh:mm
+    var duration = req.body.duration; //duration in minutes
     var sessionId; //TODO: generate
 
-    res.json({success: true, emails: emails, gcmToken: gcmToken, calToken: calToken, beginTime: beginTime, endTime: endTime});
+    res.json({success: true, emails: emails, gcmToken: gcmToken, calToken: calToken, beginTime: beginTime, endTime: endTime, duration: duration});
 });
 
 /**
