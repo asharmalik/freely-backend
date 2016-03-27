@@ -48,7 +48,9 @@ app.get('/meeting', function (req, res) {
  * Get list of meetings for a user
  */
 app.get('/meetings', function (req, res) {
+    var email = req.query.email;
 
+    res.json({success: true, email: email});
 });
 
 /**
