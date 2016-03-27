@@ -31,7 +31,7 @@ app.post('/meeting', function (req, res) {
     var endTime = req.body.end_time; //end time MM/dd/yyyy hh:mm
     var duration = req.body.duration; //duration in minutes
     var sessionId = crypto.createHash('md5').update(new Date().toString()).digest('hex');
-    
+
     res.json({success: true, emails: emails, gcmToken: gcmToken, calToken: calToken, beginTime: beginTime, endTime: endTime, duration: duration, session: sessionId});
 });
 
@@ -39,7 +39,9 @@ app.post('/meeting', function (req, res) {
  * Get a meeting
  */
 app.get('/meeting', function (req, res) {
+    var sessionId = req.query.session_id;
 
+    res.json({success: true, sessionId: sessionId});
 });
 
 /**
