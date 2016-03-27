@@ -57,21 +57,27 @@ app.get('/meetings', function (req, res) {
  * Get free times for a meeting
  */
 app.get('/free-times', function (req, res) {
+    var sessionId = req.query.session_id;
 
+    res.json({success: true, sessionId: sessionId});
 });
 
 /**
  * Select a time for a meeting
  */
 app.post('/select-time', function (req, res) {
+    var sessionId = req.body.session_id;
+    var beginTime = req.body.begin_time; //MM/dd/yyyy hh:mm
+    var endTime = req.body.end_time; //MM/dd/yyyy hh:mm
 
+    res.json({success: true, sessionId: sessionId, beginTime: beginTime, endTime: endTime});
 });
 
 /**
  * Authorization link emailed to users
  */
-app.get('/authorize', function (req, res) {
-
+app.get('/authorize/:id', function (req, res) {
+    //res.send()
 });
 
 db.connect();
