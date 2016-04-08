@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require("body-parser");
 var Promise = require("bluebird");
-var crypto = require('crypto');
+var path = require('path');
 
 var db = require("./modules/db.js");
 var email = require("./modules/email.js");
@@ -49,8 +49,6 @@ app.post('/meeting', function (req, res) {
         .catch(function (err) {
             res.json({success: false, error: err});
         });
-
-    //res.json({success: true, emails: emails, gcmToken: gcmToken, calToken: calToken, beginTime: beginTime, endTime: endTime, duration: duration, session: sessionId});
 });
 
 /**
@@ -118,6 +116,7 @@ app.get('/authorize/:session/:email', function (req, res) {
     var email = req.params.email;
 
     //TODO: show google login page
+    res.sendFile(path.join(__dirname, './html', 'authorize.html'));
 });
 
 db.connect();
