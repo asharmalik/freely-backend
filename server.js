@@ -25,6 +25,7 @@ app.get('/', function (req, res) {
  */
 app.post('/meeting', function (req, res) {
     var emails = req.body.emails; //first email is originating user
+    var groupName = req.body.group_name;
     var gcmToken = req.body.gcm; //gcm token of the originating user
     var calToken = req.body.calendar_token; //calendar token of the originating user
     var beginTime = req.body.begin_time; //beginning time MM/dd/yyyy hh:mm
@@ -36,7 +37,12 @@ app.post('/meeting', function (req, res) {
 
     db.getNumSessions()
         .then(function (numSessions) {
-            console.log(numSessions);
+            sessionId = numSessions;
+
+            return db.createSession(sessionId, groupName, emails, calToken, gcmToken, beginTime, endTime, duration);
+        })
+        .then(function () {
+            res.json({success: true});
         })
         .catch(function (err) {
             res.json({success: false, error: err});
