@@ -30,9 +30,19 @@ app.post('/meeting', function (req, res) {
     var beginTime = req.body.begin_time; //beginning time MM/dd/yyyy hh:mm
     var endTime = req.body.end_time; //end time MM/dd/yyyy hh:mm
     var duration = req.body.duration; //duration in minutes
-    var sessionId = crypto.createHash('md5').update(new Date().toString()).digest('hex');
+    var sessionId;
 
-    res.json({success: true, emails: emails, gcmToken: gcmToken, calToken: calToken, beginTime: beginTime, endTime: endTime, duration: duration, session: sessionId});
+    emails = JSON.parse(emails); //convert to array
+
+    db.getNumSessions()
+        .then(function (numSessions) {
+            console.log(numSessions);
+        })
+        .catch(function (err) {
+            res.json({success: false, error: err});
+        });
+
+    //res.json({success: true, emails: emails, gcmToken: gcmToken, calToken: calToken, beginTime: beginTime, endTime: endTime, duration: duration, session: sessionId});
 });
 
 /**
@@ -81,3 +91,5 @@ app.get('/authorize/:id', function (req, res) {
 });
 
 db.connect();
+
+//db.createSession(0, "group name", ['email1', 'email2'], "creator token", "gcm token", "begin", "end", 10);
