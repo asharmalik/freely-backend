@@ -57,7 +57,14 @@ app.post('/meeting', function (req, res) {
 app.get('/meeting', function (req, res) {
     var sessionId = req.query.session_id;
 
-    res.json({success: true, sessionId: sessionId});
+    db.getSession(0)
+        .then(function (data) {
+            res.json({success: true, data: data});
+            console.log(data);
+        })
+        .catch(function (err) {
+            res.json({success: false, error: err});
+        });
 });
 
 /**

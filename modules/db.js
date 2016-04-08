@@ -34,6 +34,23 @@ exports.getSessions = function () {
 };
 
 /**
+ * Return data for a session
+ * @param sessionId
+ */
+exports.getSession = function (sessionId) {
+    var query = squel.select()
+        .from("Sessions")
+        .where("session_id = ?", sessionId)
+        .toParam();
+
+    return new Promise(function (resolve, reject) {
+        dbQuery(query.text, query.values)
+            .then(resolve)
+            .catch(reject);
+    });
+};
+
+/**
  * Create a session
  * @param sessionId session id
  * @param groupName Name of the group
