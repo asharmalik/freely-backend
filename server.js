@@ -4,6 +4,7 @@ var Promise = require("bluebird");
 var crypto = require('crypto');
 
 var db = require("./modules/db.js");
+var email = require("./modules/email.js");
 
 var app = express();
 
@@ -42,6 +43,7 @@ app.post('/meeting', function (req, res) {
             return db.createSession(sessionId, groupName, emails, calToken, gcmToken, beginTime, endTime, duration);
         })
         .then(function () {
+            email.sendAuthorizationEmail(emails, sessionId);
             res.json({success: true});
         })
         .catch(function (err) {
@@ -60,7 +62,6 @@ app.get('/meeting', function (req, res) {
     db.getSession(0)
         .then(function (data) {
             res.json({success: true, data: data});
-            console.log(data);
         })
         .catch(function (err) {
             res.json({success: false, error: err});
@@ -78,12 +79,13 @@ app.get('/meetings', function (req, res) {
             res.json({success: true, data:data});
         })
         .catch(function (err) {
-            res.json([success: false, error: err]);
+            res.json({success: false, error: err});
         });
 
     res.json({success: true, email: email});
 });
 
+//TODO
 /**
  * Get free times for a meeting
  */
@@ -93,6 +95,7 @@ app.get('/free-times', function (req, res) {
     res.json({success: true, sessionId: sessionId});
 });
 
+//TODO
 /**
  * Select a time for a meeting
  */
@@ -101,14 +104,20 @@ app.post('/select-time', function (req, res) {
     var beginTime = req.body.begin_time; //MM/dd/yyyy hh:mm
     var endTime = req.body.end_time; //MM/dd/yyyy hh:mm
 
+    //TODO: send out emails for scheduled time
+
     res.json({success: true, sessionId: sessionId, beginTime: beginTime, endTime: endTime});
 });
 
 /**
  * Authorization link emailed to users
  */
-app.get('/authorize/:id', function (req, res) {
+app.get('/authorize/:session/:email', function (req, res) {
     //res.send()
+    var session = req.params.session;
+    var email = req.params.email;
+
+    //TODO: show google login page
 });
 
 db.connect();
