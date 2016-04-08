@@ -51,6 +51,24 @@ exports.getSession = function (sessionId) {
 };
 
 /**
+ * Get sessions for a specific email
+ * @param email
+ */
+exports.getSessionsForEmail = function (email) {
+    var query = squel.select()
+        .from("Sessions")
+        .where("email = ?", email)
+        .toParam();
+
+    return new Promise(function (resolve, reject) {
+        dbQuery(query.text, query.values)
+            .then(resolve)
+            .catch(reject);
+    });
+
+};
+
+/**
  * Create a session
  * @param sessionId session id
  * @param groupName Name of the group

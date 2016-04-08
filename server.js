@@ -73,6 +73,14 @@ app.get('/meeting', function (req, res) {
 app.get('/meetings', function (req, res) {
     var email = req.query.email;
 
+    db.getSessionsForEmail(email)
+        .then(function (data) {
+            res.json({success: true, data:data});
+        })
+        .catch(function (err) {
+            res.json([success: false, error: err]);
+        });
+
     res.json({success: true, email: email});
 });
 
