@@ -11,9 +11,12 @@ var app = express();
 var port = 4000;
 
 app.use(bodyParser.urlencoded({extended: false})); //parsing get/post params
+app.use(express.static('public'));
 
 // Set server port
 app.listen(port);
+
+
 
 console.log('Listening on port '+port);
 
