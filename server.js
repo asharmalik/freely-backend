@@ -5,6 +5,7 @@ var path = require('path');
 
 var db = require("./modules/db.js");
 var email = require("./modules/email.js");
+var calendar = require("./modules/calendar.js");
 
 var app = express();
 
@@ -111,13 +112,15 @@ app.post('/select-time', function (req, res) {
 /**
  * Authorization link emailed to users
  */
-app.get('/authorize/:session/:email', function (req, res) {
-    //res.send()
-    var session = req.params.session;
-    var email = req.params.email;
+app.get('/authorize', function (req, res) {
+    var state = req.params.state;
+    //var session = req.params.session;
+    //var email = req.params.email;
+    var meetingId = state.split("|")[0].split(":")[1];
+    var email = state.split("|")[1].split(":")[1];
 
-    //TODO: show google login page
-    res.sendFile(path.join(__dirname, './html', 'authorize.html'));
+    res.send("state: "+state+"<br>"+meetingId+"<br>"+email);
+    //res.sendFile(path.join(__dirname, './html', 'authorize.html'));
 });
 
 db.connect();
