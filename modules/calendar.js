@@ -144,4 +144,4 @@ function listEvents(auth) {
 //user clicks link which redirects them to login
 //user logs in and gets redirected to page which takes their code and generates an access token and stores in backend
 
-generateAuthUrl(0, email);
+//generateAuthUrl(0, email);

@@ -21,11 +21,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="server.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="server.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.783815">
-              <caret line="122" column="92" selection-start-line="122" selection-start-column="92" selection-end-line="122" selection-end-column="92" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
               <folding>
                 <element signature="e#532#564#0" expanded="false" />
                 <element signature="e#568#595#0" expanded="false" />
@@ -53,17 +53,17 @@
         <entry file="file://$PROJECT_DIR$/modules/email.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <caret line="2" column="27" selection-start-line="2" selection-start-column="27" selection-end-line="2" selection-end-column="27" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="calendar.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="calendar.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/calendar.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="28" column="45" selection-start-line="28" selection-start-column="45" selection-end-line="28" selection-end-column="45" />
+            <state vertical-scroll-proportion="0.8820809">
+              <caret line="146" column="0" selection-start-line="146" selection-start-column="2" selection-end-line="146" selection-end-column="28" />
               <folding>
                 <element signature="e#182#252#0" expanded="false" />
                 <element signature="n#!!doc;n#authorize#0" expanded="false" />
@@ -95,8 +95,8 @@
         <option value="$PROJECT_DIR$/modules/email.js" />
         <option value="$PROJECT_DIR$/public/auth.css" />
         <option value="$PROJECT_DIR$/html/authorize.html" />
-        <option value="$PROJECT_DIR$/modules/calendar.js" />
         <option value="$PROJECT_DIR$/server.js" />
+        <option value="$PROJECT_DIR$/modules/calendar.js" />
       </list>
     </option>
   </component>
@@ -790,14 +790,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/email.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/auth.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.059753954">
@@ -867,26 +859,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/calendar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="28" column="45" selection-start-line="28" selection-start-column="45" selection-end-line="28" selection-end-column="45" />
-          <folding>
-            <element signature="e#182#252#0" expanded="false" />
-            <element signature="n#!!doc;n#authorize#0" expanded="false" />
-            <element signature="n#!!doc;n#getNewToken#0" expanded="false" />
-            <element signature="e#4223#4316#0" expanded="false" />
-            <element signature="e#4386#4451#0" expanded="false" />
-            <element signature="e#4457#4755#0" expanded="false" />
-            <element signature="e#4559#4745#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.783815">
-          <caret line="122" column="92" selection-start-line="122" selection-start-column="92" selection-end-line="122" selection-end-column="92" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
           <folding>
             <element signature="e#532#564#0" expanded="false" />
             <element signature="e#568#595#0" expanded="false" />
@@ -905,6 +881,30 @@
             <element signature="e#2564#2602#0" expanded="false" />
             <element signature="e#2648#2950#0" expanded="false" />
             <element signature="e#2954#3000#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/email.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="27" selection-start-line="2" selection-start-column="27" selection-end-line="2" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/calendar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8820809">
+          <caret line="146" column="0" selection-start-line="146" selection-start-column="2" selection-end-line="146" selection-end-column="28" />
+          <folding>
+            <element signature="e#182#252#0" expanded="false" />
+            <element signature="n#!!doc;n#authorize#0" expanded="false" />
+            <element signature="n#!!doc;n#getNewToken#0" expanded="false" />
+            <element signature="e#4223#4316#0" expanded="false" />
+            <element signature="e#4386#4451#0" expanded="false" />
+            <element signature="e#4457#4755#0" expanded="false" />
+            <element signature="e#4559#4745#0" expanded="false" />
           </folding>
         </state>
       </provider>
