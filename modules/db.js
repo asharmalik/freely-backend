@@ -107,6 +107,27 @@ exports.createSession = function (sessionId, groupName, emails, creatorCalendarT
     });
 };
 
+exports.setCalendarTokenForUser = function (meetingId, email, token) {
+    var query = squel.update()
+        .table("Sessions")
+        .set("google_cal_token", token)
+        .where("session_id = ?", meetingId)
+        .where("email = ?", email)
+        .toParam();
+
+    return new Promise(function (resolve, reject) {
+        dbQuery(query.text, query.values)
+            .then(function (data) {
+                if (data.affectedRows > 0) {
+                    resolve();
+                } else {
+                    reject();
+                }
+            })
+            .catch(reject);
+    });
+};
+
 exports.getNumSessions = function () {
     var query = "select MAX(session_id) from Sessions;";
 

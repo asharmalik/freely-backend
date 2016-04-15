@@ -118,7 +118,19 @@ app.get('/authorize', function (req, res) {
     var meetingId = state.split("|")[0].split(":")[1];
     var email = state.split("|")[1].split(":")[1];
 
-    res.send("state: "+state+"<br>meeting: "+meetingId+"<br>email: "+email+"<br>code: "+code);
+    calendar.retrieveToken(code)
+        .then(function (token) {
+            console.log(token);
+            return db.setCalendarTokenForUser(meetingId, email, token);
+        })
+        .then(function () {
+            res.send("Successful!");
+        })
+        .catch(function () {
+            res.send("There was some error");
+        });
+
+    //res.send("state: "+state+"<br>meeting: "+meetingId+"<br>email: "+email+"<br>code: "+code);
     //res.sendFile(path.join(__dirname, './html', 'authorize.html'));
 });
 

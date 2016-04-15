@@ -2,19 +2,32 @@ var fs = require('fs');
 var readline = require('readline');
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
+var Promise = require("bluebird");
 
 var exports = module.exports = {};
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/calendar-nodejs-quickstart.json
 var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
-var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
-    process.env.USERPROFILE) + '/.credentials/';
-var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
+
+var oauth2Client;
 
 //authorize(listEvents);
 
-function generateAuthUrl(meetingId, email){
+function getOAuthclient(){
+    if(oauth2Client == null){
+        var clientSecret = "qinfghlkr3PpzkhqGJkkwvFY";
+        var clientId = "292287318292-49ifkmri2u33g87ijdfa7nacbcpsuo58.apps.googleusercontent.com";
+        var redirectUrl = "http://freely.asharmalik.us";
+        //var redirectUrl = "http://freely.asharmalik.us/";
+        var auth = new googleAuth();
+        oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+    }
+
+    return oauth2Client;
+}
+
+exports.generateAuthUrl = function(meetingId, email){
     var clientSecret = "qinfghlkr3PpzkhqGJkkwvFY";
     var clientId = "292287318292-49ifkmri2u33g87ijdfa7nacbcpsuo58.apps.googleusercontent.com";
     var redirectUrl = "http://freely.asharmalik.us";
@@ -28,8 +41,21 @@ function generateAuthUrl(meetingId, email){
 
     authUrl+="&state=mid:"+meetingId+"|email:"+email;
 
-    console.log(authUrl);
-}
+    return authUrl;
+};
+
+exports.retrieveToken = function(code) {
+    return new Promise(function (resolve, reject) {
+        getOAuthclient().getToken(code, function (err, token) {
+            if (err) {
+                reject('Error while trying to retrieve access token '+ err);
+                return;
+            }
+
+            resolve(token.access_token);
+        });
+    });
+};
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -66,14 +92,14 @@ function authorize(callback) {
     //});
 
     //Check if we have previously stored a token.
-    fs.readFile(TOKEN_PATH, function(err, token) {
-        if (err) {
-            getNewToken(oauth2Client, callback);
-        } else {
-            oauth2Client.credentials = JSON.parse(token);
-            callback(oauth2Client);
-        }
-    });
+    //fs.readFile(TOKEN_PATH, function(err, token) {
+    //    if (err) {
+    //        getNewToken(oauth2Client, callback);
+    //    } else {
+    //        oauth2Client.credentials = JSON.parse(token);
+    //        callback(oauth2Client);
+    //    }
+    //});
 }
 
 /**
