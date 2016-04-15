@@ -113,14 +113,12 @@ app.post('/select-time', function (req, res) {
  * Authorization link emailed to users
  */
 app.get('/authorize', function (req, res) {
-    var state = req.params.state;
-    var code = req.params.code;
-    //var session = req.params.session;
-    //var email = req.params.email;
+    var state = req.query.state;
+    var code = req.query.code;
     var meetingId = state.split("|")[0].split(":")[1];
     var email = state.split("|")[1].split(":")[1];
 
-    res.send("state: "+state+"<br>meeting: "+meetingId+"<br>email: "+email+"code: <br>"+code);
+    res.send("state: "+state+"<br>meeting: "+meetingId+"<br>email: "+email+"<br>code: "+code);
     //res.sendFile(path.join(__dirname, './html', 'authorize.html'));
 });
 
