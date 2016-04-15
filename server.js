@@ -114,12 +114,13 @@ app.post('/select-time', function (req, res) {
  */
 app.get('/authorize', function (req, res) {
     var state = req.params.state;
+    var code = req.params.code;
     //var session = req.params.session;
     //var email = req.params.email;
     var meetingId = state.split("|")[0].split(":")[1];
     var email = state.split("|")[1].split(":")[1];
 
-    res.send("state: "+state+"<br>"+meetingId+"<br>"+email);
+    res.send("state: "+state+"<br>meeting: "+meetingId+"<br>email: "+email+"code: <br>"+code);
     //res.sendFile(path.join(__dirname, './html', 'authorize.html'));
 });
 
