@@ -68,7 +68,6 @@ function authorize(callback) {
     var clientSecret = "qinfghlkr3PpzkhqGJkkwvFY";
     var clientId = "292287318292-49ifkmri2u33g87ijdfa7nacbcpsuo58.apps.googleusercontent.com";
     var redirectUrl = "http://freely.asharmalik.us";
-    //var redirectUrl = "http://freely.asharmalik.us/";
     var auth = new googleAuth();
     var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
