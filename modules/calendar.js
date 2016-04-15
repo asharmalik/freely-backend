@@ -30,7 +30,7 @@ function getOAuthclient(){
 exports.generateAuthUrl = function(meetingId, email){
     var clientSecret = "qinfghlkr3PpzkhqGJkkwvFY";
     var clientId = "292287318292-49ifkmri2u33g87ijdfa7nacbcpsuo58.apps.googleusercontent.com";
-    var redirectUrl = "http://freely.asharmalik.us";
+    var redirectUrl = "http://freely.asharmalik.us/authorize";
     var auth = new googleAuth();
     var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
@@ -170,4 +170,4 @@ function listEvents(auth) {
 //user clicks link which redirects them to login
 //user logs in and gets redirected to page which takes their code and generates an access token and stores in backend
 
-//generateAuthUrl(0, email);
+console.log(exports.generateAuthUrl(0, "email2"));

@@ -126,8 +126,8 @@ app.get('/authorize', function (req, res) {
         .then(function () {
             res.send("Successful!");
         })
-        .catch(function () {
-            res.send("There was some error");
+        .catch(function (error) {
+            res.send("There was some error: "+error.toString());
         });
 
     //res.send("state: "+state+"<br>meeting: "+meetingId+"<br>email: "+email+"<br>code: "+code);
