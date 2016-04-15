@@ -129,9 +129,6 @@ app.get('/authorize', function (req, res) {
         .catch(function (error) {
             res.send("There was some error: "+error.toString());
         });
-
-    //res.send("state: "+state+"<br>meeting: "+meetingId+"<br>email: "+email+"<br>code: "+code);
-    //res.sendFile(path.join(__dirname, './html', 'authorize.html'));
 });
 
 db.connect();
