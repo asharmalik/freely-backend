@@ -18,8 +18,7 @@ function getOAuthclient(){
     if(oauth2Client == null){
         var clientSecret = "qinfghlkr3PpzkhqGJkkwvFY";
         var clientId = "292287318292-49ifkmri2u33g87ijdfa7nacbcpsuo58.apps.googleusercontent.com";
-        var redirectUrl = "http://freely.asharmalik.us";
-        //var redirectUrl = "http://freely.asharmalik.us/";
+        var redirectUrl = "http://freely.asharmalik.us/authorize";
         var auth = new googleAuth();
         oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
     }

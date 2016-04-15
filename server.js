@@ -118,27 +118,22 @@ app.get('/authorize', function (req, res) {
     var meetingId = state.split("|")[0].split(":")[1];
     var email = state.split("|")[1].split(":")[1];
 
-    //calendar.retrieveToken(code)
-    //    .then(function (token) {
-    //        console.log(token);
-    //        return db.setCalendarTokenForUser(meetingId, email, token);
-    //    })
-    //    .then(function () {
-    //        res.send("Successful!");
-    //    })
-    //    .catch(function (error) {
-    //        res.send("There was some error: "+error.toString());
-    //    });
+    calendar.retrieveToken(code)
+        .then(function (token) {
+            console.log(token);
+            return db.setCalendarTokenForUser(meetingId, email, token);
+        })
+        .then(function () {
+            res.send("Successful!");
+        })
+        .catch(function (error) {
+            res.send("There was some error: "+error.toString());
+        });
 
-    res.send("state: "+state+"<br>meeting: "+meetingId+"<br>email: "+email+"<br>code: "+code);
+    //res.send("state: "+state+"<br>meeting: "+meetingId+"<br>email: "+email+"<br>code: "+code);
     //res.sendFile(path.join(__dirname, './html', 'authorize.html'));
 });
 
 db.connect();
 
 //db.createSession(0, "group name", ['email1', 'email2'], "creator token", "gcm token", "begin", "end", 10);
-
-calendar.retrieveToken("4/1jVR6F33XY4_p7tCry2NcllVC4Pv2ZzPp37NdmEoU8Y")
-.then(function (data) {
-        console.log(data);
-    })
