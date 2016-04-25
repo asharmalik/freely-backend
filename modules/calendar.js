@@ -168,4 +168,4 @@ function listEvents(auth) {
 //user clicks link which redirects them to login
 //user logs in and gets redirected to page which takes their code and generates an access token and stores in backend
 
-console.log(exports.generateAuthUrl(0, "email2"));
+//console.log(exports.generateAuthUrl(0, "rohannagar11@gmail.com"));

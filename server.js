@@ -81,8 +81,6 @@ app.get('/meetings', function (req, res) {
         .catch(function (err) {
             res.json({success: false, error: err});
         });
-
-    res.json({success: true, email: email});
 });
 
 //TODO
@@ -120,7 +118,6 @@ app.get('/authorize', function (req, res) {
 
     calendar.retrieveToken(code)
         .then(function (token) {
-            console.log(token);
             return db.setCalendarTokenForUser(meetingId, email, token);
         })
         .then(function () {

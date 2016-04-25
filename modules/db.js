@@ -143,6 +143,24 @@ exports.getNumSessions = function () {
     });
 };
 
+exports.haveAllTokens = function (sessionId) {
+    return new Promise(function (resolve, reject) {
+        exports.getSession(sessionId)
+            .then(function (data) {
+                var haveAllTokens = true;
+
+                for(var i = 0;i<data.length;i++){
+                    if(data[i].google_cal_token == null){
+                        haveAllTokens = false;
+                    }
+                }
+
+                resolve(haveAllTokens);
+            })
+            .catch(reject);
+    });
+};
+
 function dbQuery(text, values) {
     if (values == undefined) {
         values = [];
