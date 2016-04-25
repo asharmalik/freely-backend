@@ -165,6 +165,17 @@ function listEvents(auth) {
     });
 }
 
+function freebusy(auth, startTime, endTime){
+    var calendar = google.calendar('v3');
+    calendar.freebusy.query(
+	{ 
+	    //put all the info here
+	},
+	function (err, response) {
+	    //do a function here
+	});
+}
+
 //user clicks link which redirects them to login
 //user logs in and gets redirected to page which takes their code and generates an access token and stores in backend
 
