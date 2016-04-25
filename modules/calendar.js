@@ -165,14 +165,27 @@ function listEvents(auth) {
     });
 }
 
-function freebusy(auth, startTime, endTime){
+function freebusy(auth, startTime, endTime, callID){
     var calendar = google.calendar('v3');
     calendar.freebusy.query(
 	{ 
-	    //put all the info here
+	    auth: auth,
+	    items: [ {id : callID} ],
+	    timeMin: startTime.toISOString(),
+	    timeMax: endTime.toISOString(),
 	},
 	function (err, response) {
 	    //do a function here
+	    if(err){
+		console.log('Error contacting freebusy: ' + err );
+		return;
+	    }
+	    var busytimes = response[callID]['busy'];
+	    if(busytimes.length == 0){
+		console.log('No free times');
+	    } else {
+		console.log('free time at: ' + busytimes);
+	    }
 	});
 }
 
