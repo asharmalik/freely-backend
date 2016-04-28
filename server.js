@@ -9,7 +9,7 @@ var calendar = require("./modules/calendar.js");
 
 var app = express();
 
-var port = 80;
+var port = 8888;
 
 app.use(bodyParser.urlencoded({extended: false})); //parsing get/post params
 app.use(express.static('public'));
