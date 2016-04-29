@@ -183,46 +183,71 @@ function listEvents(auth) {
 exports.freebusy = function(auth, startTime, endTime, callID){
     var calendar = google.calendar('v3');
 
-    return new Promise(function(resolve, reject(){
-	calendar.freebusy.query(
-	{ 
-	    auth: auth,
-	    items: [ {id : callID} ],
-	    timeMin: startTime.toISOString(),
-	    timeMax: endTime.toISOString(),
-	},
-	function (err, response) {
-	    //do a function here
-	    if(err){
-		console.log('Error contacting freebusy: ' + err );
-		reject(err);
-		return;
-	    }
-	    var busytimes = response[callID]['busy'];
-	    if(busytimes.length == 0){
-		console.log('No free times');
-	    } else {
-		console.log('free time at: ' + busytimes);
-	    }
+    return new Promise(function (resolve, reject) {
+        calendar.freebusy.query(
+            {
+                auth: auth,
+                items: [{id: callID}],
+                timeMin: startTime.toISOString(),
+                timeMax: endTime.toISOString()
+            },
+            function (err, response) {
+                //do a function here
+                if (err) {
+                    reject(err);
+                    console.log('Error contacting freebusy: ' + err);
+                    return;
+                }
+                var busytimes = response[callID]['busy'];
+                if (busytimes.length == 0) {
+                    console.log('No free times');
+                } else {
+                    console.log('free time at: ' + busytimes);
+                }
 
-	    resolve(busytimes);
-	});
+                resolve(busytimes);
+            });
     });
-    
 };
 
 exports.getFreeTimes = function (usersData, startTime, endTime) {
     return new Promise(function (resolve, reject) {
         var freeTimes = [];
-	var busyTimes = [];
-	for( var user in usersData ){
-	    busyTimes.add( freebusy( user.google_cal_token , startTime, endTime, user.email ));
-	}
-        resolve(freeTimes);
-	
+
+        var obj = {
+            usersData: usersData,
+            current: 0,
+            startTime: startTime,
+            endTime: endTime,
+            freeTimes: []
+        };
+
+        freeTimeHelper(obj);
     });
 
 };
+
+function freeTimeHelper(obj){
+    var current = obj.current;
+    var auth;
+    var email;
+
+    exports.freebusy(auth, obj.startTime, obj.endTime, email)
+        .then(function (data) {
+            obj.freeTimes[current] = data;
+            obj.current++;
+
+            if(obj.current<obj.usersData.length){
+                freeTimeHelper(obj);
+            }else{
+                //done
+                console.log(obj.freeTimes);
+            }
+        })
+        .catch(function (err) {
+            //TODO
+        });
+}
 
 //takes the list of busy times from the freebusy query
 //takes the startTime and endTime in same format
