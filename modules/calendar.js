@@ -182,7 +182,9 @@ function listEvents(auth) {
  */
 exports.freebusy = function(auth, startTime, endTime, callID){
     var calendar = google.calendar('v3');
-    calendar.freebusy.query(
+
+    return new Promise(function(resolve, reject(){
+	calendar.freebusy.query(
 	{ 
 	    auth: auth,
 	    items: [ {id : callID} ],
@@ -193,6 +195,7 @@ exports.freebusy = function(auth, startTime, endTime, callID){
 	    //do a function here
 	    if(err){
 		console.log('Error contacting freebusy: ' + err );
+		reject(err);
 		return;
 	    }
 	    var busytimes = response[callID]['busy'];
@@ -201,14 +204,22 @@ exports.freebusy = function(auth, startTime, endTime, callID){
 	    } else {
 		console.log('free time at: ' + busytimes);
 	    }
+
+	    resolve(busytimes);
 	});
+    });
+    
 };
 
 exports.getFreeTimes = function (usersData, startTime, endTime) {
     return new Promise(function (resolve, reject) {
         var freeTimes = [];
-
+	var busyTimes = [];
+	for( var user in usersData ){
+	    busyTimes.add( freebusy( user.google_cal_token , startTime, endTime, user.email ));
+	}
         resolve(freeTimes);
+	
     });
 };
 
