@@ -3,6 +3,7 @@ var readline = require('readline');
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 var Promise = require("bluebird");
+require('datejs');
 
 var exports = module.exports = {};
 
@@ -187,6 +188,37 @@ function freebusy(auth, startTime, endTime, callID){
 		console.log('free time at: ' + busytimes);
 	    }
 	});
+}
+
+
+//takes the list of busy times from the freebusy query
+//takes the startTime and endTime in same format
+//outputs list of strings that are hours in which they are free
+//assume all in same timezone
+exports.mutualFreeTimes = function( busytimes, startTime, endTime ){
+    var start = Date.parse(startTime);
+    var end = Date.parse(endTime);
+    
+    var current = new Date(start);
+    var freetimes = [];
+    while( current.isBefore(end) ){
+	var dirty = false;
+	for(var i = 0; i < busytimes.length; ++i ){
+	    var busy = busytimes[i];
+	    var bts = Date.parse(busy.start);
+	    var bte = Date.parse(busy.end);
+	    if( current.isAfter( bts ) && current.isBefore( bte ) ){
+		dirty = true;
+	    }
+	}
+	if( !dirty ){
+	    freetimes.push(current.toISOString());
+	}
+
+	current.addHours(1);
+    }
+
+    return freetimes;
 }
 
 //user clicks link which redirects them to login

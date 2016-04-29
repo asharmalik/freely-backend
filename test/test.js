@@ -1,9 +1,22 @@
 var assert = require('chai').assert;
-describe('Array', function() {
-  describe('#indexOf()', function () {
-    it('should return -1 when the value is not present', function () {
-      assert.equal(-1, [1,2,3].indexOf(5));
-      assert.equal(-1, [1,2,3].indexOf(0));
+var calendar = require('../modules/calendar.js');
+require("datejs");
+
+describe('Calendar', function() {
+    describe('#mutualFreeTimes()', function () {
+	it('should return 0 when no freetimes', function () {
+	    var busies = [ 
+		{ start : "2016-04-13T07:00:00Z", end : '2016-04-13T09:00:00Z' }
+	    ]
+	    var startTime = '2016-04-13T06:00:00Z';
+	    var endTime = '2016-04-13T11:00:00Z';
+
+	    var meh = Date.parse(startTime);
+	    console.log(meh.toString());
+
+	    var free = calendar.mutualFreeTimes( busies, startTime, endTime );
+	    console.log(free);
+	    assert.isAbove(free.length, 0, "free has something");
+	});
     });
-  });
 });

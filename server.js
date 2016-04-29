@@ -89,6 +89,9 @@ app.get('/meetings', function (req, res) {
  */
 app.get('/free-times', function (req, res) {
     var sessionId = req.query.session_id;
+    var startTime = req.body.begin_time;
+
+    calendar.freebusy( sessionId, startTime, endTime, callID );
 
     res.json({success: true, sessionId: sessionId});
 });
