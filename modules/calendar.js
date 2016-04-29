@@ -210,6 +210,7 @@ exports.getFreeTimes = function (usersData, startTime, endTime) {
 
         resolve(freeTimes);
     });
+
 };
 
 //takes the list of busy times from the freebusy query
@@ -240,7 +241,7 @@ exports.mutualFreeTimes = function( busytimes, startTime, endTime ){
     }
 
     return freetimes;
-}
+};
 
 //user clicks link which redirects them to login
 //user logs in and gets redirected to page which takes their code and generates an access token and stores in backend

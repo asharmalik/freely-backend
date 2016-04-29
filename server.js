@@ -87,7 +87,6 @@ app.get('/meetings', function (req, res) {
         });
 });
 
-//TODO
 /**
  * Get free times for a meeting
  */
@@ -115,20 +114,6 @@ app.get('/free-times', function (req, res) {
     res.json({success: true, sessionId: sessionId});
 });
 
-//TODO
-/**
- * Select a time for a meeting
- */
-app.post('/select-time', function (req, res) {
-    var sessionId = req.body.session_id;
-    var beginTime = req.body.begin_time; //MM/dd/yyyy hh:mm
-    var endTime = req.body.end_time; //MM/dd/yyyy hh:mm
-
-    //TODO: send out emails for scheduled time
-
-    res.json({success: true, sessionId: sessionId, beginTime: beginTime, endTime: endTime});
-});
-
 /**
  * Authorization link emailed to users
  */
@@ -151,10 +136,3 @@ app.get('/authorize', function (req, res) {
 });
 
 db.connect();
-
-//db.createSession(0, "group name", ['email1', 'email2'], "creator token", "gcm token", "begin", "end", 10);
-
-db.getTokensAndNames("0")
-.then(function (data) {
-        console.log(data)
-    })
