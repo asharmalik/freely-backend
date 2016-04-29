@@ -136,3 +136,11 @@ app.get('/authorize', function (req, res) {
 });
 
 db.connect();
+
+db.getSession("0")
+.then(function (data) {
+        var d1  = new Date("4/29/2016 12:00 AM");
+        var d2  = new Date("4/30/2016 12:00 AM");
+
+        calendar.getFreeTimes(data, d1, d2)
+    })

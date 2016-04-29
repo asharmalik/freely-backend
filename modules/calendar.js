@@ -184,6 +184,7 @@ exports.freebusy = function(auth, startTime, endTime, callID){
     var calendar = google.calendar('v3');
 
     return new Promise(function (resolve, reject) {
+
         calendar.freebusy.query(
             {
                 auth: auth,
@@ -222,7 +223,11 @@ exports.getFreeTimes = function (usersData, startTime, endTime) {
             freeTimes: []
         };
 
-        freeTimeHelper(obj);
+        freeTimeHelper(obj, function (data) {
+            console.log(data);
+        }, function (err) {
+            console.log(err);
+        })
     });
 
 };
@@ -230,25 +235,35 @@ exports.getFreeTimes = function (usersData, startTime, endTime) {
 //ya29..zwKlKfAFIbdIbdrbINaada1lP9Wa9ywXWW35ZZ9PMelgBFQCUkUQm0adiRqzOwPIXFM
 //ya29..zwLUNfEhnquQBzxZ4vc_IRGEN91EYONkjbemNiYTGluB6lTWen7xSQuDfqPy-rr-1Q
 
-function freeTimeHelper(obj){
+//loads data one by one
+function freeTimeHelper(obj, someFunc, someErrFunc){
     var current = obj.current;
-    var auth;
-    var email;
+    var auth = obj.usersData[obj.current].google_cal_token;
+    var email = obj.usersData[obj.current].email;
+
+    if(obj.resolve == null) {
+        obj.resolve = someFunc;
+    }
+
+    if(obj.reject == null){
+        obj.reject = someErrFunc;
+    }
 
     exports.freebusy(auth, obj.startTime, obj.endTime, email)
         .then(function (data) {
-            obj.freeTimes[current] = data;
-            obj.current++;
+            //obj.freeTimes[current] = data;
+            //obj.current++;
 
-            if(obj.current<obj.usersData.length){
-                freeTimeHelper(obj);
-            }else{
-                //done
-                console.log(obj.freeTimes);
-            }
+            //if(obj.current<obj.usersData.length){
+            //    freeTimeHelper(obj);
+            //}else{
+            //    //done
+            //    console.log('done');
+            //    obj.resolve(obj.freeTimes);
+            //}
         })
         .catch(function (err) {
-            //TODO
+            obj.reject(err);
         });
 }
 
