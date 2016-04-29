@@ -19,6 +19,7 @@
   "dependencies": {
     "bluebird": "^3.3.4",
     "body-parser": "^1.15.0",
+    "datejs": "^1.0.0-rc3",
     "express": "^4.13.4",
     "google-auth-library": "^0.9.7",
     "googleapis": "^5.0.0",

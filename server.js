@@ -42,7 +42,11 @@ app.post('/meeting', function (req, res) {
         .then(function (numSessions) {
             sessionId = numSessions;
 
-            return db.createSession(sessionId, groupName, emails, calToken, gcmToken, beginTime, endTime, duration);
+            beginTime = new Date(beginTime);
+            endTime = new Date(endTime);
+
+
+            return db.createSession(sessionId, groupName, emails, calToken, gcmToken, beginTime.toISOString(), endTime.toISOString(), duration);
         })
         .then(function () {
             email.sendAuthorizationEmail(emails, sessionId);
@@ -91,7 +95,22 @@ app.get('/free-times', function (req, res) {
     var sessionId = req.query.session_id;
     var startTime = req.body.begin_time;
 
-    calendar.freebusy( sessionId, startTime, endTime, callID );
+    db.getSession(sessionId)
+        .then(function (data) {
+            var startTime = data[0].begin_time;
+            var endTime = data[0].end_time;
+
+            return calendar.getFreeTimes(data, startTime, endTime);
+        })
+        .then(function (data) {
+            res.json({success: true, data: data});
+        })
+        .catch(function (err) {
+            res.json({success: false});
+        });
+
+
+    //calendar.freebusy( sessionId, startTime, endTime, callID );
 
     res.json({success: true, sessionId: sessionId});
 });
@@ -134,3 +153,8 @@ app.get('/authorize', function (req, res) {
 db.connect();
 
 //db.createSession(0, "group name", ['email1', 'email2'], "creator token", "gcm token", "begin", "end", 10);
+
+db.getTokensAndNames("0")
+.then(function (data) {
+        console.log(data)
+    })

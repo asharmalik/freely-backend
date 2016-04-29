@@ -107,6 +107,22 @@ exports.createSession = function (sessionId, groupName, emails, creatorCalendarT
     });
 };
 
+exports.getTokensAndNames = function (sessionId) {
+    var query = squel.select()
+        .from("Sessions")
+        .field("google_cal_token")
+        .field("email")
+        .where("session_id = ?", sessionId)
+        .toParam();
+
+    return new Promise(function (resolve, reject) {
+        dbQuery(query.text, query.values)
+            .then(resolve)
+            .catch(reject);
+    });
+
+};
+
 exports.setCalendarTokenForUser = function (meetingId, email, token) {
     var query = squel.update()
         .table("Sessions")

@@ -3,6 +3,8 @@ var readline = require('readline');
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 var Promise = require("bluebird");
+
+//modify Date to support extra functions
 require('datejs');
 
 var exports = module.exports = {};
@@ -166,7 +168,19 @@ function listEvents(auth) {
     });
 }
 
-function freebusy(auth, startTime, endTime, callID){
+//[ { google_cal_token: 'ya29..zwKlKfAFIbdIbdrbINaada1lP9Wa9ywXWW35ZZ9PMelgBFQCUkUQm0adiRqzOwPIXFM',
+//    email: 'asharm95@gmail.com' },
+//    { google_cal_token: 'ya29..zwLUNfEhnquQBzxZ4vc_IRGEN91EYONkjbemNiYTGluB6lTWen7xSQuDfqPy-rr-1Q',
+//        email: 'rohannagar11@gmail.com' } ]
+
+/**
+ *
+ * @param auth
+ * @param startTime
+ * @param endTime
+ * @param callID
+ */
+exports.freebusy = function(auth, startTime, endTime, callID){
     var calendar = google.calendar('v3');
     calendar.freebusy.query(
 	{ 
@@ -188,8 +202,15 @@ function freebusy(auth, startTime, endTime, callID){
 		console.log('free time at: ' + busytimes);
 	    }
 	});
-}
+};
 
+exports.getFreeTimes = function (usersData, startTime, endTime) {
+    return new Promise(function (resolve, reject) {
+        var freeTimes = [];
+
+        resolve(freeTimes);
+    });
+};
 
 //takes the list of busy times from the freebusy query
 //takes the startTime and endTime in same format
