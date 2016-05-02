@@ -103,14 +103,10 @@ app.get('/meetings', function (req, res) {
  */
 app.get('/free-times', function (req, res) {
     var sessionId = req.query.session_id;
-    var startTime = req.body.begin_time;
 
     db.getSession(sessionId)
         .then(function (data) {
-            var startTime = data[0].begin_time;
-            var endTime = data[0].end_time;
-
-            return calendar.getFreeTimes(data, startTime, endTime);
+            calendar.getFreeTimes(data, data[0].begin_time, data[0].end_time)
         })
         .then(function (data) {
             res.json({success: true, data: data});
@@ -122,7 +118,7 @@ app.get('/free-times', function (req, res) {
 
     //calendar.freebusy( sessionId, startTime, endTime, callID );
 
-    res.json({success: true, sessionId: sessionId});
+    //res.json({success: true, sessionId: sessionId});
 });
 
 /**
@@ -147,9 +143,3 @@ app.get('/authorize', function (req, res) {
 });
 
 db.connect();
-
-db.getSession("0")
-.then(function (data) {
-        calendar.getFreeTimes(data, data[0].begin_time, data[0].end_time)
-    })
-

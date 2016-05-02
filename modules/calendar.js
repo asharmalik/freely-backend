@@ -262,10 +262,12 @@ exports.getFreeTimes = function (usersData, startTime, endTime) {
 
                 dates[i].setTimezone("CST");
 
-                console.log(dates[i].toString());
+                dates[i] = dates[i].toDateString()+" "+dates[i].toLocaleTimeString();
             }
+
+            resolve(dates);
         }, function (err) {
-            console.log(err);
+            reject(err);
         })
     });
 
