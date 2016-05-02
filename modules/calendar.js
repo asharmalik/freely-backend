@@ -319,7 +319,7 @@ exports.mutualFreeTimes = function (busytimes, startTime, endTime) {
             var busy = busytimes[i];
             var bts = Date.parse(busy.start);
             var bte = Date.parse(busy.end);
-            if (current.isAfter(bts) && current.isBefore(bte)) {
+            if ((current.isAfter(bts) || current.equals(bts)) && current.isBefore(bte)) {
                 dirty = true;
             }
         }
