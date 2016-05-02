@@ -56,6 +56,7 @@ app.post('/meeting', function (req, res) {
             return db.createSession(sessionId, groupName, emails, calToken, gcmToken, beginTime.toISOString(), endTime.toISOString(), duration);
         })
         .then(function () {
+            emails.splice(0, 1); //already have auth for 1st email
             email.sendAuthorizationEmail(emails, sessionId);
             res.json({success: true});
         })
