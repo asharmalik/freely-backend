@@ -17,8 +17,28 @@ var oauth2Client;
 
 //authorize(listEvents);
 
-function getOAuthclient(){
-    if(oauth2Client == null){
+function getOAuthFromToken(token) {
+    var client = newAuthClient();
+
+    client.credentials = {
+        access_token: token
+    };
+
+    return client;
+}
+
+function newAuthClient() {
+    var clientSecret = "qinfghlkr3PpzkhqGJkkwvFY";
+    var clientId = "292287318292-49ifkmri2u33g87ijdfa7nacbcpsuo58.apps.googleusercontent.com";
+    var redirectUrl = "http://freely.asharmalik.us/authorize";
+    var auth = new googleAuth();
+    var client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+
+    return client;
+}
+
+function getOAuthclient() {
+    if (oauth2Client == null) {
         var clientSecret = "qinfghlkr3PpzkhqGJkkwvFY";
         var clientId = "292287318292-49ifkmri2u33g87ijdfa7nacbcpsuo58.apps.googleusercontent.com";
         var redirectUrl = "http://freely.asharmalik.us/authorize";
@@ -29,7 +49,7 @@ function getOAuthclient(){
     return oauth2Client;
 }
 
-exports.generateAuthUrl = function(meetingId, email){
+exports.generateAuthUrl = function (meetingId, email) {
     var clientSecret = "qinfghlkr3PpzkhqGJkkwvFY";
     var clientId = "292287318292-49ifkmri2u33g87ijdfa7nacbcpsuo58.apps.googleusercontent.com";
     var redirectUrl = "http://freely.asharmalik.us/authorize";
@@ -41,16 +61,21 @@ exports.generateAuthUrl = function(meetingId, email){
         scope: SCOPES
     });
 
-    authUrl+="&state=mid:"+meetingId+"|email:"+email;
+    authUrl += "&state=mid:" + meetingId + "|email:" + email;
 
     return authUrl;
 };
 
-exports.retrieveToken = function(code) {
+/**
+ * Retrieve an access token from an auth code
+ * @param code
+ * @returns {bluebird|exports|module.exports}
+ */
+exports.retrieveToken = function (code) {
     return new Promise(function (resolve, reject) {
         getOAuthclient().getToken(code, function (err, token) {
             if (err) {
-                reject('Error while trying to retrieve access token '+ err);
+                reject('Error while trying to retrieve access token ' + err);
                 return;
             }
 
@@ -122,9 +147,9 @@ function getNewToken(oauth2Client, callback) {
         output: process.stdout
     });
 
-    rl.question('Enter the code from that page here: ', function(code) {
+    rl.question('Enter the code from that page here: ', function (code) {
         rl.close();
-        oauth2Client.getToken(code, function(err, token) {
+        oauth2Client.getToken(code, function (err, token) {
             if (err) {
                 console.log('Error while trying to retrieve access token', err);
                 return;
@@ -149,7 +174,7 @@ function listEvents(auth) {
         maxResults: 10,
         singleEvents: true,
         orderBy: 'startTime'
-    }, function(err, response) {
+    }, function (err, response) {
         if (err) {
             console.log('The API returned an error: ' + err);
             return;
@@ -168,11 +193,6 @@ function listEvents(auth) {
     });
 }
 
-//[ { google_cal_token: 'ya29..zwKlKfAFIbdIbdrbINaada1lP9Wa9ywXWW35ZZ9PMelgBFQCUkUQm0adiRqzOwPIXFM',
-//    email: 'asharm95@gmail.com' },
-//    { google_cal_token: 'ya29..zwLUNfEhnquQBzxZ4vc_IRGEN91EYONkjbemNiYTGluB6lTWen7xSQuDfqPy-rr-1Q',
-//        email: 'rohannagar11@gmail.com' } ]
-
 /**
  *
  * @param auth
@@ -180,17 +200,18 @@ function listEvents(auth) {
  * @param endTime
  * @param callID
  */
-exports.freebusy = function(auth, startTime, endTime, callID){
+exports.freebusy = function (auth, startTime, endTime, callID) {
     var calendar = google.calendar('v3');
 
     return new Promise(function (resolve, reject) {
-
         calendar.freebusy.query(
             {
                 auth: auth,
-                items: [{id: callID}],
-                timeMin: startTime.toISOString(),
-                timeMax: endTime.toISOString()
+                resource: {
+                    items: [{id: callID}],
+                    timeMin: startTime.toISOString(),
+                    timeMax: endTime.toISOString()
+                }
             },
             function (err, response) {
                 //do a function here
@@ -199,19 +220,22 @@ exports.freebusy = function(auth, startTime, endTime, callID){
                     console.log('Error contacting freebusy: ' + err);
                     return;
                 }
-                var busytimes = response[callID]['busy'];
-                if (busytimes.length == 0) {
-                    console.log('No free times');
-                } else {
-                    console.log('free time at: ' + busytimes);
+
+                var busy = [];
+
+                for (var key in response.calendars) {
+                    busy = response.calendars[key].busy;
+                    break;
                 }
 
-                resolve(busytimes);
+                resolve(busy);
             });
     });
 };
 
 exports.getFreeTimes = function (usersData, startTime, endTime) {
+    startTime = new Date(startTime);
+    endTime = new Date(endTime);
     return new Promise(function (resolve, reject) {
         var freeTimes = [];
 
@@ -224,7 +248,22 @@ exports.getFreeTimes = function (usersData, startTime, endTime) {
         };
 
         freeTimeHelper(obj, function (data) {
-            console.log(data);
+            var busyTimes = data;
+            var flatList = [];
+
+            for(var i = 0;i<busyTimes.length;i++){
+                flatList = flatList.concat(busyTimes[i]);
+            }
+
+            var dates = exports.mutualFreeTimes(flatList, startTime.toISOString(), endTime.toISOString());
+
+            for(var i = 0;i<dates.length;i++){
+                dates[i] =  new Date(dates[i]);
+
+                dates[i].setTimezone("CST");
+
+                console.log(dates[i].toString());
+            }
         }, function (err) {
             console.log(err);
         })
@@ -232,35 +271,31 @@ exports.getFreeTimes = function (usersData, startTime, endTime) {
 
 };
 
-//ya29..zwKlKfAFIbdIbdrbINaada1lP9Wa9ywXWW35ZZ9PMelgBFQCUkUQm0adiRqzOwPIXFM
-//ya29..zwLUNfEhnquQBzxZ4vc_IRGEN91EYONkjbemNiYTGluB6lTWen7xSQuDfqPy-rr-1Q
-
 //loads data one by one
-function freeTimeHelper(obj, someFunc, someErrFunc){
+function freeTimeHelper(obj, someFunc, someErrFunc) {
     var current = obj.current;
     var auth = obj.usersData[obj.current].google_cal_token;
     var email = obj.usersData[obj.current].email;
 
-    if(obj.resolve == null) {
+    if (obj.resolve == null) {
         obj.resolve = someFunc;
     }
 
-    if(obj.reject == null){
+    if (obj.reject == null) {
         obj.reject = someErrFunc;
     }
 
-    exports.freebusy(auth, obj.startTime, obj.endTime, email)
+    exports.freebusy(getOAuthFromToken(auth), obj.startTime, obj.endTime, email)
         .then(function (data) {
-            //obj.freeTimes[current] = data;
-            //obj.current++;
+            obj.freeTimes[current] = data;
+            obj.current++;
 
-            //if(obj.current<obj.usersData.length){
-            //    freeTimeHelper(obj);
-            //}else{
-            //    //done
-            //    console.log('done');
-            //    obj.resolve(obj.freeTimes);
-            //}
+            if (obj.current < obj.usersData.length) {
+                freeTimeHelper(obj);
+            } else {
+                //done
+                obj.resolve(obj.freeTimes);
+            }
         })
         .catch(function (err) {
             obj.reject(err);
@@ -271,36 +306,40 @@ function freeTimeHelper(obj, someFunc, someErrFunc){
 //takes the startTime and endTime in same format
 //outputs list of strings that are hours in which they are free
 //assume all in same timezone
-exports.mutualFreeTimes = function( busytimes, startTime, endTime ){
+exports.mutualFreeTimes = function (busytimes, startTime, endTime) {
     var start = Date.parse(startTime);
     var end = Date.parse(endTime);
-    
+
     var current = new Date(start);
     var freetimes = [];
-    while( current.isBefore(end) ){
-	var dirty = false;
-	for(var i = 0; i < busytimes.length; ++i ){
-	    var busy = busytimes[i];
-	    var bts = Date.parse(busy.start);
-	    var bte = Date.parse(busy.end);
-	    if( current.isAfter( bts ) && current.isBefore( bte ) ){
-		dirty = true;
-	    }
-	}
-	if( !dirty ){
-	    freetimes.push(current.toISOString());
-	}
+    while (current.isBefore(end)) {
+        var dirty = false;
+        for (var i = 0; i < busytimes.length; ++i) {
+            var busy = busytimes[i];
+            var bts = Date.parse(busy.start);
+            var bte = Date.parse(busy.end);
+            if (current.isAfter(bts) && current.isBefore(bte)) {
+                dirty = true;
+            }
+        }
+        if (!dirty) {
+            freetimes.push(current.toISOString());
+        }
 
-	current.addHours(1);
+        current.addHours(1);
+        //current.addMinutes(30);
     }
 
     return freetimes;
 };
 
+
+//exports.freebusy(getOAuthFromToken("ya29.CjHWAgrWnup5B-BhkPVT76Nq5VLjDXKaEvR7G9KmB7UHHp0rNi5HNIjtwu1DIbqQRIXV"), today, tomorrow, "asharm95@gmail.com")
+//    .then(function (data) {
+//        console.log(data);
+//    })
+
 //user clicks link which redirects them to login
 //user logs in and gets redirected to page which takes their code and generates an access token and stores in backend
-
-//console.log(exports.generateAuthUrl(0, "rohannagar11@gmail.com"));
-//console.log(exports.generateAuthUrl(0, "asharm95@gmail.com"));
 
 //the code from the auth url looks like 4/9MgHMbmm3B70xRMlW979Jl7sBH9U8d4Cpj7-5KfQ204
