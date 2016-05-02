@@ -85,50 +85,6 @@ exports.retrieveToken = function (code) {
 };
 
 /**
- * Create an OAuth2 client with the given credentials, and then execute the
- * given callback function.
- *
- * @param {Object} credentials The authorization client credentials.
- * @param {function} callback The callback to call with the authorized client.
- */
-function authorize(callback) {
-    var clientSecret = "qinfghlkr3PpzkhqGJkkwvFY";
-    var clientId = "292287318292-49ifkmri2u33g87ijdfa7nacbcpsuo58.apps.googleusercontent.com";
-    var redirectUrl = "http://freely.asharmalik.us";
-    var auth = new googleAuth();
-    var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-
-    //oauth2Client.credentials = {
-    //    access_token: 'ya29..xQJi43Y2nE3H7PNDRcKKIzZyidKwItB1Q8RTurX4MSvVSKB0l35pQSU2aVVtznAYKw',
-    //    //token_type: 'Bearer',
-    //    //expiry_date: 1460749028250
-    //};
-    //
-    //callback(oauth2Client);
-
-    //oauth2Client.getToken("code from auth url", function(err, token) {
-    //    if (err) {
-    //        console.log('Error while trying to retrieve access token', err);
-    //        return;
-    //    }
-    //    console.log(token);
-    //      token.access_token
-    //    oauth2Client.credentials = token;
-    //    callback(oauth2Client);
-    //});
-
-    //Check if we have previously stored a token.
-    //fs.readFile(TOKEN_PATH, function(err, token) {
-    //    if (err) {
-    //        getNewToken(oauth2Client, callback);
-    //    } else {
-    //        oauth2Client.credentials = JSON.parse(token);
-    //        callback(oauth2Client);
-    //    }
-    //});
-}
-
-/**
  * Get and store new token after prompting for user authorization, and then
  * execute the given callback with the authorized OAuth2 client.
  *
@@ -250,6 +206,9 @@ exports.getFreeTimes = function (usersData, startTime, endTime) {
             var busyTimes = data;
             var flatList = [];
 
+            console.log('busy times:');
+            console.log(busyTimes);
+
             for(var i = 0;i<busyTimes.length;i++){
                 flatList = flatList.concat(busyTimes[i]);
             }
@@ -290,6 +249,9 @@ function freeTimeHelper(obj, someFunc, someErrFunc) {
         .then(function (data) {
             obj.freeTimes[current] = data;
             obj.current++;
+
+            console.log('current: '+current);
+            console.log(data);
 
             if (obj.current < obj.usersData.length) {
                 freeTimeHelper(obj);
@@ -333,14 +295,3 @@ exports.mutualFreeTimes = function (busytimes, startTime, endTime) {
 
     return freetimes;
 };
-
-
-//exports.freebusy(getOAuthFromToken("ya29.CjHWAgrWnup5B-BhkPVT76Nq5VLjDXKaEvR7G9KmB7UHHp0rNi5HNIjtwu1DIbqQRIXV"), today, tomorrow, "asharm95@gmail.com")
-//    .then(function (data) {
-//        console.log(data);
-//    })
-
-//user clicks link which redirects them to login
-//user logs in and gets redirected to page which takes their code and generates an access token and stores in backend
-
-//the code from the auth url looks like 4/9MgHMbmm3B70xRMlW979Jl7sBH9U8d4Cpj7-5KfQ204
