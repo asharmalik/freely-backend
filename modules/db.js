@@ -152,7 +152,11 @@ exports.getNumSessions = function () {
             .then(function (data) {
                 var num = data[0]['MAX(session_id)'];
 
-                if(num == null) num = 0;
+                if(num == null) {
+                    num = 0;
+                }else{
+                    num = num+1;
+                }
 
                 resolve(num);
             })
