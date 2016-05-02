@@ -106,7 +106,7 @@ app.get('/free-times', function (req, res) {
 
     db.getSession(sessionId)
         .then(function (data) {
-            calendar.getFreeTimes(data, data[0].begin_time, data[0].end_time)
+            return calendar.getFreeTimes(data, data[0].begin_time, data[0].end_time)
         })
         .then(function (data) {
             res.json({success: true, data: data});
@@ -114,11 +114,6 @@ app.get('/free-times', function (req, res) {
         .catch(function (err) {
             res.json({success: false});
         });
-
-
-    //calendar.freebusy( sessionId, startTime, endTime, callID );
-
-    //res.json({success: true, sessionId: sessionId});
 });
 
 /**

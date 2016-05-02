@@ -236,9 +236,8 @@ exports.freebusy = function (auth, startTime, endTime, callID) {
 exports.getFreeTimes = function (usersData, startTime, endTime) {
     startTime = new Date(startTime);
     endTime = new Date(endTime);
-    return new Promise(function (resolve, reject) {
-        var freeTimes = [];
 
+    return new Promise(function (resolve, reject) {
         var obj = {
             usersData: usersData,
             current: 0,
