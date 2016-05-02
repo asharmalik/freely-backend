@@ -39,7 +39,6 @@ app.post('/meeting', function (req, res) {
     emails = JSON.parse(emails); //convert to array
 
     var calToken;
-    //TODO: retrieve calToken from calAuth
 
     calendar.retrieveToken(calAuth)
         .then(function (token) {
@@ -49,6 +48,8 @@ app.post('/meeting', function (req, res) {
         })
         .then(function (lastSessionId) {
             sessionId = lastSessionId+1;
+
+            console.log('sessionId: '+sessionId);
 
             beginTime = new Date(beginTime+" CST");
             endTime = new Date(endTime+" CST");
