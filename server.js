@@ -70,7 +70,11 @@ app.post('/meeting', function (req, res) {
 app.get('/meeting', function (req, res) {
     var sessionId = req.query.session_id;
 
-    db.getSession(0)
+    if(sessionId == null){
+        return res.json({success: false});
+    }
+
+    db.getSession(sessionId)
         .then(function (data) {
             res.json({success: true, data: data});
         })
