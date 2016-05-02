@@ -47,8 +47,8 @@ app.post('/meeting', function (req, res) {
 
             return db.getNumSessions();
         })
-        .then(function (numSessions) {
-            sessionId = numSessions;
+        .then(function (lastSessionId) {
+            sessionId = lastSessionId+1;
 
             beginTime = new Date(beginTime+" CST");
             endTime = new Date(endTime+" CST");
