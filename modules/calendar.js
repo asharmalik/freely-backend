@@ -301,3 +301,6 @@ exports.mutualFreeTimes = function( busytimes, startTime, endTime ){
 //user logs in and gets redirected to page which takes their code and generates an access token and stores in backend
 
 //console.log(exports.generateAuthUrl(0, "rohannagar11@gmail.com"));
+//console.log(exports.generateAuthUrl(0, "asharm95@gmail.com"));
+
+//the code from the auth url looks like 4/9MgHMbmm3B70xRMlW979Jl7sBH9U8d4Cpj7-5KfQ204

@@ -29,22 +29,29 @@ app.get('/', function (req, res) {
 app.post('/meeting', function (req, res) {
     var emails = req.body.emails; //first email is originating user
     var groupName = req.body.group_name;
-    var gcmToken = req.body.gcm; //gcm token of the originating user
-    var calToken = req.body.calendar_token; //calendar token of the originating user
+    var gcmToken = null; //gcm token of the originating user
+    var calAuth = req.body.calendar_auth; //calendar token of the originating user
     var beginTime = req.body.begin_time; //beginning time MM/dd/yyyy hh:mm
     var endTime = req.body.end_time; //end time MM/dd/yyyy hh:mm
-    var duration = req.body.duration; //duration in minutes
+    var duration = 0; //duration in minutes
     var sessionId;
 
     emails = JSON.parse(emails); //convert to array
 
-    db.getNumSessions()
+    var calToken;
+    //TODO: retrieve calToken from calAuth
+
+    calendar.retrieveToken(calAuth)
+        .then(function (token) {
+            calToken = token;
+
+            return db.getNumSessions();
+        })
         .then(function (numSessions) {
             sessionId = numSessions;
 
-            beginTime = new Date(beginTime);
-            endTime = new Date(endTime);
-
+            beginTime = new Date(beginTime+" CST");
+            endTime = new Date(endTime+" CST");
 
             return db.createSession(sessionId, groupName, emails, calToken, gcmToken, beginTime.toISOString(), endTime.toISOString(), duration);
         })
@@ -137,10 +144,10 @@ app.get('/authorize', function (req, res) {
 
 db.connect();
 
-db.getSession("0")
-.then(function (data) {
-        var d1  = new Date("4/29/2016 12:00 AM");
-        var d2  = new Date("4/30/2016 12:00 AM");
-
-        calendar.getFreeTimes(data, d1, d2)
-    })
+//db.getSession("0")
+//.then(function (data) {
+//        var d1  = new Date("4/29/2016 12:00 AM");
+//        var d2  = new Date("4/30/2016 12:00 AM");
+//
+//        calendar.getFreeTimes(data, d1, d2)
+//    })
