@@ -40,6 +40,8 @@ app.post('/meeting', function (req, res) {
 
     var calToken;
 
+    console.log(calAuth);
+
     calendar.retrieveToken(calAuth)
         .then(function (token) {
             calToken = token;
