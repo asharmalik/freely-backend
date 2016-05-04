@@ -192,7 +192,8 @@ exports.freebusy = function (auth, startTime, endTime, callID) {
 exports.getFreeTimes = function (usersData, startTime, endTime) {
     startTime = new Date(startTime);
     endTime = new Date(endTime);
-
+	//startTime.addHours(-1);
+	//endTime.addHours(-1);
     return new Promise(function (resolve, reject) {
         var obj = {
             usersData: usersData,
@@ -218,7 +219,7 @@ exports.getFreeTimes = function (usersData, startTime, endTime) {
             for(var i = 0;i<dates.length;i++){
                 dates[i] =  new Date(dates[i]);
 
-                dates[i].setTimezone("CST");
+                //dates[i].setTimezone("CST");
 
                 dates[i] = dates[i].toDateString()+" "+dates[i].toLocaleTimeString();
             }
@@ -275,13 +276,18 @@ exports.mutualFreeTimes = function (busytimes, startTime, endTime) {
 
     var current = new Date(start);
     var freetimes = [];
+	freetimes.push(start.toISOString());
+	freetimes.push(end.toISOString());
     while (current.isBefore(end)) {
         var dirty = false;
         for (var i = 0; i < busytimes.length; ++i) {
             var busy = busytimes[i];
             var bts = Date.parse(busy.start);
             var bte = Date.parse(busy.end);
+		freetimes.push(busy.start);
+		freetimes.push(busy.end);
             if ((current.isAfter(bts) || current.equals(bts)) && current.isBefore(bte)) {
+		freetimes.push(current.toISOString());
                 dirty = true;
             }
         }
