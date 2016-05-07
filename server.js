@@ -140,15 +140,3 @@ app.get('/authorize', function (req, res) {
 });
 
 db.connect();
-
-//get free times for session 1
-db.getSession(1)
-    .then(function (data) {
-        return calendar.getFreeTimes(data, data[0].begin_time, data[0].end_time)
-    })
-    .then(function (data) {
-        console.log(data);
-    })
-    .catch(function (err) {
-        console.log(err);
-    });
